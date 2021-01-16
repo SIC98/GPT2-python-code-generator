@@ -2,3 +2,6 @@ venv/
 .idea/
 resources/*
 !resources/.gitkeep
+examples/GPT_SECRET_KEY.json
+.ipynb_checkpoints/
+__pycache__/
