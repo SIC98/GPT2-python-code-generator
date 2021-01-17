@@ -60,6 +60,10 @@ class GPT:
         self.output_suffix = output_suffix
         self.append_output_prefix_to_query = append_output_prefix_to_query
         self.stop = (output_suffix + input_prefix).strip()
+        self.first_explain_txt = ""
+    
+    def add_explain(self, txt):
+        self.first_explain_txt = txt
 
     def add_example(self, ex):
         """Adds an example to the object.
@@ -83,8 +87,13 @@ class GPT:
 
     def get_prime_text(self):
         """Formats all examples to prime the model."""
-        return "".join(
+        examples_txt = "".join(
             [self.format_example(ex) for ex in self.examples.values()])
+        if self.first_explain_txt != "":
+            return self.first_explain_txt + "\n\n" + examples_txt
+        else:
+            return examples_txt
+            
 
     def get_engine(self):
         """Returns the engine specified for the API."""
