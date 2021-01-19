@@ -5,3 +5,5 @@ resources/*
 examples/GPT_SECRET_KEY.json
 .ipynb_checkpoints/
 __pycache__/
+data/*
+!data/.gitkeep
