@@ -7,3 +7,4 @@ examples/GPT_SECRET_KEY.json
 __pycache__/
 data/*
 !data/.gitkeep
+finetune/
