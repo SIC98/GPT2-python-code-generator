@@ -39,11 +39,11 @@ for file in total_files:
 random.shuffle(total_data)
 train_len = math.ceil(len(total_data) * 0.9)
 
-with open("data/data.txt", "wb") as fp:
-    pickle.dump(total_data, fp)
+with open("data/data.txt", "w") as fp:
+    fp.write('\n'.join(total_data))
 
-with open("data/train.txt", "wb") as fp:
-    pickle.dump(total_data[:train_len], fp)
+with open("data/train.txt", "w") as fp:
+    fp.write('\n'.join(total_data[:train_len]))
 
-with open("data/test.txt", "wb") as fp:
-    pickle.dump(total_data[train_len:], fp)
+with open("data/test.txt", "w") as fp:
+    fp.write('\n'.join(total_data[train_len:]))
