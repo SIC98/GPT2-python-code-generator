@@ -1,17 +1,16 @@
 from subprocess import call
-import pickle
-import random
 import math
-import json
 import os
+import csv
+csv_columns = ['text']
 
 with open('top100_repository.txt', 'r') as f:
     lines = f.readlines()
 
-# for line in lines:
-#     call(['git', 'clone', line.strip(), f'resources/{line.strip().split("/")[-1]}'])
+for line in lines:
+    call(['git', 'clone', line.strip(), f'resources/{line.strip().split("/")[-1]}'])
 
-json_data = {}
+json_data = []
 total_files = []
 count = 0
 
@@ -24,7 +23,6 @@ for line in lines:
 
 print('files: ', len(total_files))
 
-idx = 0
 for file in total_files:
     with open(file, "r") as f:
         try:
@@ -36,22 +34,24 @@ for file in total_files:
         bos_token = '<BOS>'
         eos_token = '<EOS>'
         data = bos_token + summary + eos_token
-        json_data[idx] = data
-        idx += 1
+        json_data.append({'text': data})
 
-keys = list(json_data.keys())
-random.shuffle(keys)
+train_len = math.ceil(len(json_data) * 0.9)
 
-train_len = math.ceil(len(keys) * 0.9)
+with open("data/data.csv", 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+        writer.writeheader()
+        for data in json_data:
+            writer.writerow(data)
 
-train_dict = {k: json_data[k] for k in keys[:train_len]}
-test_dict = {k: json_data[k] for k in keys[train_len:]}
+with open("data/train.csv", 'w') as csvfile:
+    writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+    writer.writeheader()
+    for data in json_data[:train_len]:
+        writer.writerow(data)
 
-with open("data/data.json", "w") as fp:
-    json.dump(json_data, fp, indent=4)
-
-with open("data/train.json", "w") as fp:
-    json.dump(train_dict, fp, indent=4)
-
-with open("data/test.json", "w") as fp:
-    json.dump(test_dict, fp, indent=4)
+    with open("data/test.csv", 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+        writer.writeheader()
+        for data in json_data[train_len:]:
+            writer.writerow(data)
