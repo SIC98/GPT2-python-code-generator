@@ -8,3 +8,4 @@ __pycache__/
 data/*
 !data/.gitkeep
 finetune/
+GPT2-python-code-generator/
